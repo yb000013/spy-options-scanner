@@ -333,11 +333,11 @@ else:
             x="market_prob_itm",
             y="model_prob_itm",
             color="edge_itm",
-            size="ev_per_contract",
             title="Market-Implied vs Simulated Probability (ITM)",
             labels={"market_prob_itm": "Market Probability", "model_prob_itm": "Model Probability"},
             height=400,
-            color_continuous_scale="RdYlGn"
+            color_continuous_scale="RdYlGn",
+            hover_data=["strike", "ev_per_contract", "volume"]
         )
         fig3.add_shape(
             type="line",
