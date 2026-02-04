@@ -246,10 +246,13 @@ results = scan_write_put_edges(
     min_premium=min_premium
 )
 
-st.subheader("🏆 Mispriced WRITE PUT Candidates (Sell List)")
+# Keep only positive expected-value trades
+results = results[results["ev_per_contract"] > 0].copy()
+
+st.subheader("🏆 Mispriced WRITE PUT Candidates (Positive EV Only)")
 
 if results.empty:
-    st.warning("No mispriced sell puts found with your filters. Try lowering Min Edge or loosening liquidity filters.")
+    st.warning("No +EV mispriced sell puts found with your filters. Try lowering Min Edge, increasing premium tolerances, or loosening liquidity filters.")
 else:
     results["market_itm_%"] = results["market_prob_itm"] * 100
     results["model_itm_%"] = results["model_prob_itm"] * 100
