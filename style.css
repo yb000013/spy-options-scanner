@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Intro */
+#intro-screen {
+    padding: 50px;
+}
+
+#intro-screen h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 1em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+/* Stage info */
+#stage-info {
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 80%;
+    max-width: 700px;
+    transition: all 0.5s ease;
+}
+
+/* Choice buttons */
+.choice-btn {
+    display: block;
+    width: 90%;
+    max-width: 600px;
+    margin: 12px auto;
+    padding: 15px;
+    text-align: left;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    background: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.choice-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Feedback */
+#feedback {
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 600px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    font-size: 1.1em;
+}
+
+/* Progress bar */
+.progress-bar {
+    width: 80%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #4CB5AE;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+/* Stage themes */
+.stage-theme-prenatal { border-left: 8px solid #9C89B8; background-color: #F7F0FF; }
+.stage-theme-childhood { border-left: 8px solid #4CB5AE; background-color: #EFFBF9; }
+.stage-theme-adolescence { border-left: 8px solid #FF9F1C; background-color: #FFF5E6; }
+.stage-theme-adulthood { border-left: 8px solid #2A9D8F; background-color: #ECF8F6; }
+.stage-theme-oldage { border-left: 8px solid #E76F51; background-color: #FDF2EE; }

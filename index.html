@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Human’s Guide to Healthy Development</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Intro Screen -->
+    <div id="intro-screen">
+        <h1>The Human’s Guide to Healthy Development</h1>
+        <p class="subtitle">An Interactive Life Simulator by Yonatan Brunshtein</p>
+        <p>Navigate the five key stages of human development. Make informed choices to build resilience, secure relationships, and a fulfilling life. Your journey to understanding healthy development begins now.</p>
+        <button id="start-btn">Start Your Life Journey</button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" style="display:none;">
+        <div id="stage-info">
+            <h2 id="stage-title"></h2>
+            <p id="challenge-text"></p>
+        </div>
+
+        <div id="choices">
+            <button class="choice-btn" id="choice1"></button>
+            <button class="choice-btn" id="choice2"></button>
+            <button class="choice-btn" id="choice3"></button>
+        </div>
+
+        <div id="feedback"></div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div id="stats-display">
+            <p>Attachment Security: <span id="stat-attachment"></span></p>
+            <p>Emotional Regulation: <span id="stat-emotion"></span></p>
+            <p>Identity Clarity: <span id="stat-identity"></span></p>
+            <p>Social Support: <span id="stat-social"></span></p>
+            <p>Cognitive Health: <span id="stat-cognitive"></span></p>
+        </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="end-screen" style="display:none;">
+        <h2>Your Development Journey is Complete!</h2>
+        <p id="final-score"></p>
+        <p class="outcome-text" id="outcome-message"></p>
+        <button id="restart-btn">Play Again</button>
+        <button id="quit-btn">Finish</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
