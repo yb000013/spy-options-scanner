@@ -119,6 +119,11 @@ with st.sidebar:
     min_oi = st.number_input("Min open interest", value=int(preset["min_oi"]), step=50)
 
     refresh = st.button("🔄 Refresh Scan")
+    
+    st.divider()
+    st.subheader("Portfolio Settings (for EV % & sizing)")
+    portfolio_value = st.number_input("Portfolio value ($)", min_value=1000, value=100000, step=1000)
+    allocation_pct = st.slider("Allocation per trade (% of portfolio)", min_value=0.5, max_value=10.0, value=1.0, step=0.5)
 
 if refresh:
     st.rerun()
@@ -264,13 +269,21 @@ else:
 
     results["spread_%"] = results["spread_pct"] * 100
 
+    # EV as percent of capital at risk (strike * 100 shares)
+    results["ev_pct_of_risk"] = (results["ev_per_contract"] / (results["strike"] * 100)) * 100
+
+    # Recommended contracts based on portfolio allocation
+    allocation_amount = float(portfolio_value) * (float(allocation_pct) / 100.0)
+    # avoid division by zero
+    results["recommended_contracts"] = np.floor(allocation_amount / (results["strike"] * 100)).astype(int).clip(lower=0)
+
     st.dataframe(
         results[[
             "strike", "mid", "bid", "ask",
             "market_itm_%", "model_itm_%", "edge_itm_%",
             "market_touch_%", "model_touch_%", "edge_touch_%",
             "imbalance_itm_ratio",
-            "ev_per_contract",
+            "ev_per_contract", "ev_pct_of_risk", "recommended_contracts",
             "spread_%", "volume", "openInterest"
         ]].style.format({
             "mid": "{:.2f}",
@@ -287,6 +300,7 @@ else:
 
             "imbalance_itm_ratio": "{:.2f}x",
             "ev_per_contract": "${:,.2f}",
+            "ev_pct_of_risk": "{:.4f}%",
             "spread_%": "{:.2f}%",
         }),
         use_container_width=True,
