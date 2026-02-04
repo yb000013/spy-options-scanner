@@ -299,54 +299,65 @@ else:
     
     st.subheader(f"📈 Filtered Results ({len(filtered_results)} opportunities)")
     if not filtered_results.empty:
-        # Chart 1: Edge vs Strike
+        # Chart 1: Edge vs Strike - Shows which strikes have the best edge
         fig1 = px.bar(
             filtered_results,
             x="strike",
             y="edge_itm",
             color="edge_itm",
-            title="Edge (%) per Strike",
-            labels={"strike": "Strike Price", "edge_itm": "Edge (%)"},
-            height=400,
-            color_continuous_scale="RdYlGn"
+            title="<b>Edge (%) by Strike Price</b><br><sub>Higher edge = market is overpricing risk. Sell these puts.</sub>",
+            labels={"strike": "Strike Price ($)", "edge_itm": "Edge (%)"},
+            height=450,
+            color_continuous_scale="RdYlGn",
+            hover_data={"strike": ":.2f", "edge_itm": ":.2%"}
         )
+        fig1.update_layout(hovermode="x unified", font=dict(size=12), title_font_size=14, showlegend=False)
         st.plotly_chart(fig1, use_container_width=True)
 
-        # Chart 2: Expected Value per Contract vs Strike
+        # Chart 2: Expected Value Analysis - Dollar profit potential
         fig2 = px.scatter(
             filtered_results,
             x="strike",
             y="ev_per_contract",
-            color="edge_itm",
-            size="volume",
-            title="Expected Value per Contract (size = volume)",
-            labels={"strike": "Strike Price", "ev_per_contract": "EV per Contract ($)"},
-            height=400,
-            color_continuous_scale="RdYlGn",
-            hover_data=["bid", "ask", "mid", "market_itm_%", "model_itm_%"]
+            color="market_itm_%",
+            title="<b>Expected Value per Contract</b><br><sub>Dollar profit if your edge model is correct.</sub>",
+            labels={"strike": "Strike Price ($)", "ev_per_contract": "EV per Contract ($)", "market_itm_%": "Market ITM %"},
+            height=450,
+            color_continuous_scale="Blues",
+            hover_data={"strike": ":.2f", "ev_per_contract": "$:.2f", "bid": ":.2f", "ask": ":.2f", "volume": ":d"}
         )
+        fig2.update_layout(hovermode="closest", font=dict(size=12), title_font_size=14)
+        fig2.add_hline(y=0, line_dash="dash", line_color="red", annotation_text="Breakeven", annotation_position="right")
         st.plotly_chart(fig2, use_container_width=True)
 
-        # Chart 3: Market vs Model Probability
+        # Chart 3: Market vs Model Probability - Mispricing visualization
         fig3 = px.scatter(
             filtered_results,
             x="market_prob_itm",
             y="model_prob_itm",
             color="edge_itm",
-            title="Market-Implied vs Simulated Probability (ITM)",
-            labels={"market_prob_itm": "Market Probability", "model_prob_itm": "Model Probability"},
-            height=400,
+            title="<b>Market-Implied vs Simulated Probability (ITM)</b><br><sub>Points above diagonal = overpriced (SELL). Points below = underpriced (AVOID).</sub>",
+            labels={"market_prob_itm": "Market Probability", "model_prob_itm": "Model Probability", "edge_itm": "Edge"},
+            height=450,
             color_continuous_scale="RdYlGn",
-            hover_data=["strike", "ev_per_contract", "volume"]
+            hover_data={"strike": True, "ev_per_contract": "$:.2f", "volume": True}
         )
-        fig3.add_shape(
-            type="line",
-            x0=0, y0=0,
-            x1=1, y1=1,
-            line=dict(dash="dash", color="gray"),
-            name="Perfect Pricing"
-        )
+        fig3.add_shape(type="line", x0=0, y0=0, x1=1, y1=1, line=dict(dash="dash", color="gray", width=2))
+        fig3.add_annotation(x=0.7, y=0.65, text="<b>Fair Pricing</b><br>(diagonal)", showarrow=False, bgcolor="rgba(200,200,200,0.3)", bordercolor="gray", borderwidth=1)
+        fig3.update_layout(hovermode="closest", font=dict(size=12), title_font_size=14, xaxis_range=[0, 1], yaxis_range=[0, 1])
         st.plotly_chart(fig3, use_container_width=True)
+
+        # Summary stats
+        st.markdown("---")
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("Best Edge", f"{filtered_results['edge_itm'].max():.2%}", "Highest mispricing")
+        with col2:
+            st.metric("Avg Edge", f"{filtered_results['edge_itm'].mean():.2%}", "Average opportunity")
+        with col3:
+            st.metric("Best EV", f"${filtered_results['ev_per_contract'].max():.2f}", "Max expected profit")
+        with col4:
+            st.metric("Avg EV", f"${filtered_results['ev_per_contract'].mean():.2f}", "Avg expected profit")
 
 
 # Edge Explanation Section
